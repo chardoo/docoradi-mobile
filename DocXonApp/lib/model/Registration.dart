@@ -3,7 +3,7 @@
   email: "",
   firstName: "",
   lastName: "",
-  telephone: "",
+  mobile: "",
   password: "",
   
 }
@@ -13,17 +13,17 @@ class Registration {
   String email = "";
   String firstName = "";
   String lastName = "";
-  String telephone = "";
+  String mobile = "";
   String password = "";
 
   Registration(
-      this.email, this.firstName, this.lastName, this.telephone, this.password);
+      this.email, this.firstName, this.lastName, this.mobile, this.password);
 
   Registration.empty() {
     email = "";
     firstName = "";
     lastName = "";
-    telephone = "";
+    mobile = "";
     password = "";
   }
 
@@ -33,7 +33,7 @@ class Registration {
       json["email"] as String,
       json["firstName"] as String,
       json["lastName"] as String,
-      json["telephone"] as String,
+      json["mobile"] as String,
       json["password"] as String,
     );
   }
@@ -44,7 +44,7 @@ class Registration {
       "email": email,
       "firstName": firstName,
       "lastName": lastName,
-      "telephone": telephone,
+      "mobile": mobile,
       "password": password,
     };
     return map;
@@ -52,7 +52,7 @@ class Registration {
 
   @override
   String toString() {
-    return "SignupPaypal = [ email: $email, firstName: $firstName, lastName: $lastName, totalAmount: $telephone "
-        "amountPerDoor: $password]";
+    return "registration = { email: $email, firstName: $firstName, lastName: $lastName, mobile: $mobile "
+        "password: $password}";
   }
 }

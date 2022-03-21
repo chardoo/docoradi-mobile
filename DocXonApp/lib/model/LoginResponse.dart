@@ -36,13 +36,13 @@ class LoginResponseObject {
   //serialization
   Map<String, dynamic> toJson() {
     var map = {
-      "id": "",
+      "id": id,
       "email": email,
-      "role": "",
-      "token": "",
-      "firstName": "",
-      "lastName": "",
-      "expiration": "",
+      "role": role,
+      "token": token,
+      "firstName": firstName,
+      "lastName": lastName,
+      "expiration": expiration,
     };
     return map;
   }

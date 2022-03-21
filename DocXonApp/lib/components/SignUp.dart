@@ -7,31 +7,28 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dashboard.dart';
+import 'Login.dart';
 import '../model/Registration.dart';
-import 'SignUp.dart';
+
 import '../httpBaseInstances/dio_instance.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../model/LoginResponse.dart';
-import 'package:http/http.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPage createState() => _LoginPage();
+  _SignUpPage createState() => _SignUpPage();
 }
 
-class _LoginPage extends State<LoginPage> {
+class _SignUpPage extends State<SignUpPage> {
   //email RegExp
   final _emailRegExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
-  final loginModel = Login('', '');
-  final loginresponse = LoginResponseObject('', '', '', '', '', '', '');
+  final RegistrationModel = Registration('', '', '', '', '');
   List<MaterialColor> colorizeColors = [
     Colors.red,
     Colors.amber,
@@ -62,7 +59,6 @@ class _LoginPage extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                      height: 500,
                       margin:
                           const EdgeInsets.only(top: 80, left: 10, right: 10),
                       decoration: BoxDecoration(
@@ -81,7 +77,7 @@ class _LoginPage extends State<LoginPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Login ',
+                                'Create Account',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Color(0xFF800020),
@@ -97,16 +93,76 @@ class _LoginPage extends State<LoginPage> {
                                     TextFormField(
                                       decoration: InputDecoration(
                                           focusColor: Color(0xFF800020),
+                                          hintText: 'First Name',
+                                          hintStyle: TextStyle(
+                                            color: Color(0xFF800020),
+                                          )),
+                                      onChanged: (value) {
+                                        RegistrationModel.firstName = value;
+                                      },
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter first name';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                          focusColor: Color(0xFF800020),
+                                          hintText: 'last Name',
+                                          hintStyle: TextStyle(
+                                            color: Color(0xFF800020),
+                                          )),
+                                      onChanged: (value) {
+                                        RegistrationModel.lastName = value;
+                                      },
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter last name';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                          focusColor: Color(0xFF800020),
+                                          hintText: 'Telephone',
+                                          hintStyle: TextStyle(
+                                            color: Color(0xFF800020),
+                                          )),
+                                      onChanged: (value) {
+                                        RegistrationModel.mobile = value;
+                                      },
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter telephone';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                          focusColor: Color(0xFF800020),
                                           hintText: 'Email',
                                           hintStyle: TextStyle(
                                             color: Color(0xFF800020),
                                           )),
                                       onChanged: (value) {
-                                        loginModel.email = value;
+                                        RegistrationModel.email = value;
                                       },
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter  email';
+                                          return 'Please enter email';
                                         }
                                         return null;
                                       },
@@ -125,7 +181,7 @@ class _LoginPage extends State<LoginPage> {
                                             color: Color(0xFF800020),
                                           )),
                                       onChanged: (value) {
-                                        loginModel.password = value;
+                                        RegistrationModel.password = value;
                                       },
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -133,18 +189,6 @@ class _LoginPage extends State<LoginPage> {
                                         }
                                         return null;
                                       },
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          "Forget Password",
-                                          style: TextStyle(
-                                            color: Color(0xFF004d99),
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ],
                                     ),
                                     SizedBox(
                                       height: 20,
@@ -160,7 +204,7 @@ class _LoginPage extends State<LoginPage> {
                                         color: Color(0xFF800020),
                                         child: MaterialButton(
                                             child: Text(
-                                              'Login',
+                                              'Sign Up',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.white,
@@ -172,11 +216,11 @@ class _LoginPage extends State<LoginPage> {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                   const SnackBar(
-                                                      content:
-                                                          Text('Login Acount')),
+                                                      content: Text(
+                                                          'Creating Acount')),
                                                 );
 
-                                                login();
+                                                register();
                                               }
                                             }),
                                       ),
@@ -184,8 +228,22 @@ class _LoginPage extends State<LoginPage> {
                                   ],
                                 ),
                               ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "By signiny up you agree",
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                  Text(
+                                    "Terms of service",
+                                    style: TextStyle(
+                                        color: Color(0xFF004d99), fontSize: 15),
+                                  ),
+                                ],
+                              ),
                               SizedBox(
-                                height: 10,
+                                height: 25,
                               ),
                               Padding(
                                 padding:
@@ -207,7 +265,7 @@ class _LoginPage extends State<LoginPage> {
                                       width: MediaQuery.of(context).size.width,
                                       child: SignInButton(
                                         Buttons.GoogleDark,
-                                        text: 'Sign Up with Google',
+                                        text: 'Sign Up with Google  ',
                                         onPressed: () {},
                                       ),
                                     ),
@@ -218,7 +276,7 @@ class _LoginPage extends State<LoginPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Dont have an account',
+                                    'already have an account',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.black54,
@@ -227,14 +285,15 @@ class _LoginPage extends State<LoginPage> {
                                     ),
                                   ),
                                   MaterialButton(
-                                      child: Text(
-                                        'Sign Up',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: Color(0xFF004d99),
-                                            fontSize: 15),
-                                      ),
-                                      onPressed: signUP)
+                                    child: Text(
+                                      'Login',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: Color(0xFF004d99),
+                                          fontSize: 15),
+                                    ),
+                                    onPressed: myDashboard,
+                                  )
                                 ],
                               )
                             ]),
@@ -255,31 +314,21 @@ class _LoginPage extends State<LoginPage> {
         title: Center(child: Text('DocXon')));
   }
 
-  signUP() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SignUpPage()));
-  }
-
   myDashboard() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Dashboard()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
-  Future<dynamic> login() async {
+  Future<dynamic> register() async {
     // debugPrint("login users hit");
     try {
       ///flutter/login testing endpoint
       ///advent_user/login prod_endpoint
-      final response =
-          await dio.post("/service/user/login", data: loginModel.toJson());
-      if (response.statusCode == 200) {
+      final response = await dio.post("/service/user/userRegister",
+          data: RegistrationModel.toJson());
+      print(response);
+      if (response.statusCode == 201) {
         // Map<String, dynamic> decoded = response.data;
-        // print(response.data['email']);
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setBool('isLoggedIn', true);
-        prefs.setString('userId', response.data['email']);
-        prefs.setString('token', response.data['token']);
-
         myDashboard();
         // return decoded;
       } else {
